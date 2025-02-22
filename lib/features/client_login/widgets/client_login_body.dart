@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
-import 'package:gerenciador_matriculas/features/admin_login/cubit/cubit.dart';
-import 'package:gerenciador_matriculas/features/client_login/cubit/client_login_cubit.dart';
+
+import 'login_button_widget.dart';
 
 class ClientLoginBody extends StatefulWidget {
   const ClientLoginBody({super.key});
@@ -20,104 +20,66 @@ class _ClientLoginBodyState extends State<ClientLoginBody> {
     return Form(
       key: _formKey,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Spacer(),
-            TextFormField(
-              controller: _emailController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Por favor, insira o email';
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+            Expanded(
+              child: FlutterLogo(
+                size: 220,
               ),
             ),
-            Gutter(),
-            TextFormField(
-              controller: _senhaController,
-              obscureText: true,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Por favor, insira a senha';
-                }
+            Expanded(
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _emailController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira o email';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Gutter(),
+                  TextFormField(
+                    controller: _senhaController,
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira a senha';
+                      }
 
-                if (value.length < 6) {
-                  return 'A senha deve ter pelo menos 6 caracteres';
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                labelText: 'Senha',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                      if (value.length < 6) {
+                        return 'A senha deve ter pelo menos 6 caracteres';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Senha',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  GutterLarge(),
+                  LoginButtonWidget(
+                    formKey: _formKey,
+                    emailController: _emailController,
+                    senhaController: _senhaController,
+                  ),
+                  Spacer(),
+                ],
               ),
             ),
-            GutterLarge(),
-            LoginButtonWidget(
-              formKey: _formKey,
-              emailController: _emailController,
-              senhaController: _senhaController,
-            ),
-            Spacer(),
+            SizedBox(height: 20, child: Text('Criado pela equipe A. V1.0.0')),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class LoginButtonWidget extends StatelessWidget {
-  const LoginButtonWidget({
-    super.key,
-    required GlobalKey<FormState> formKey,
-    required TextEditingController emailController,
-    required TextEditingController senhaController,
-  })  : _formKey = formKey,
-        _emailController = emailController,
-        _senhaController = senhaController;
-
-  final GlobalKey<FormState> _formKey;
-  final TextEditingController _emailController;
-  final TextEditingController _senhaController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: BlocBuilder<ClientLoginCubit, ClientLoginState>(
-        builder: (context, state) {
-          if (state is ClientLoginLoading) {
-            return const CircularProgressIndicator();
-          }
-
-          return ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              foregroundColor: Colors.white,
-              backgroundColor: Theme.of(context).colorScheme.primary,
-            ),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                context.read<ClientLoginCubit>().login(
-                      _emailController.text,
-                      _senhaController.text,
-                    );
-              }
-            },
-            child: Text('Entrar'),
-          );
-        },
       ),
     );
   }
