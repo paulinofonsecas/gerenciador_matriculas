@@ -30,11 +30,19 @@ class ClientLoginView extends StatelessWidget {
     return BlocListener<ClientLoginCubit, ClientLoginState>(
       listener: (context, state) {
         if (state is ClientLoginSuccess) {
-          print(state.user);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Login realizado com sucesso'),
+            ),
+          );
         }
 
         if (state is ClientLoginFailure) {
-          print(state.error);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Erro ao realizar login'),
+            ),
+          );
         }
       },
       child: const ClientLoginBody(),

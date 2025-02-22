@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "966708253815",
+    "project_id": "gerenciador-matricula",
+    "storage_bucket": "gerenciador-matricula.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966708253815:android:aeb10f683ecfe4d3a8e272",
+        "android_client_info": {
+          "package_name": "com.example.gerenciador_matriculas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfIR3l5qk-wFyC12YC0JcmG9nsuvpYcZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

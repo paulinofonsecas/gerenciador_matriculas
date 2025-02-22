@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:gerenciador_matriculas/features/admin_login/cubit/cubit.dart';
 import 'package:gerenciador_matriculas/features/client_login/cubit/client_login_cubit.dart';
@@ -13,7 +12,7 @@ class ClientLoginBody extends StatefulWidget {
 
 class _ClientLoginBodyState extends State<ClientLoginBody> {
   final _formKey = GlobalKey<FormState>();
-  final _matriculaController = TextEditingController();
+  final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
 
   @override
@@ -26,17 +25,15 @@ class _ClientLoginBodyState extends State<ClientLoginBody> {
           children: [
             Spacer(),
             TextFormField(
-              controller: _matriculaController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              controller: _emailController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Por favor, insira o número de matrícula';
+                  return 'Por favor, insira o email';
                 }
                 return null;
               },
               decoration: InputDecoration(
-                labelText: 'Nº de Matrícula',
+                labelText: 'Email',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -78,9 +75,9 @@ class _ClientLoginBodyState extends State<ClientLoginBody> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     context.read<ClientLoginCubit>().login(
-                      _matriculaController.text,
-                      _senhaController.text,
-                    );
+                          _emailController.text,
+                          _senhaController.text,
+                        );
                   }
                 },
                 child: Text('Entrar'),
