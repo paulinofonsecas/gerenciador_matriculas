@@ -78,6 +78,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_adaptive_scaffold:
+    dependency: transitive
+    description:
+      name: flutter_adaptive_scaffold
+      sha256: "7279d74da2f2531a16d21c2ec327308778c3aedd672dfe4eaf3bf416463501f8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.2"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -86,6 +94,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.0.0"
+  flutter_gutter:
+    dependency: "direct main"
+    description:
+      name: flutter_gutter
+      sha256: "2aa99181796d6f7d2de66da962b71b0feb996ec69b7a1ad2ac1c2119f25b041b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -172,7 +188,7 @@ packages:
     source: hosted
     version: "1.9.1"
   provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: provider
       sha256: c8a055ee5ce3fd98d6fc872478b03823ffdb448699c6ebdbbc71d59b596fd48c
@@ -250,4 +266,4 @@ packages:
     version: "14.3.1"
 sdks:
   dart: ">=3.7.0 <4.0.0"
-  flutter: ">=3.18.0-18.0.pre.54"
+  flutter: ">=3.22.0"
