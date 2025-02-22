@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_matriculas/data/services/auth_firebase.dart';
+import 'package:gerenciador_matriculas/dependencies.dart';
+import 'package:gerenciador_matriculas/features/admin_home/view/admin_home_page.dart';
 import 'package:gerenciador_matriculas/features/client_login/cubit/cubit.dart';
 import 'package:gerenciador_matriculas/features/client_login/widgets/client_login_body.dart';
 
@@ -28,13 +30,11 @@ class ClientLoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ClientLoginCubit, ClientLoginState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is ClientLoginSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Login realizado com sucesso'),
-            ),
-          );
+          getIt.registerSingleton(state.user);
+
+          Navigator.of(context).pushReplacement(AdminHomePage.route());
         }
 
         if (state is ClientLoginFailure) {

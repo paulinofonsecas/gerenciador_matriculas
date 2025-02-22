@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gerenciador_matriculas/app_widget.dart';
 import 'package:gerenciador_matriculas/data/services/auth_firebase.dart';
+import 'package:gerenciador_matriculas/dependencies.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -9,6 +10,8 @@ void main() async {
 
   // init firebase
   await Firebase.initializeApp();
+
+  setupDependencies();
 
   runApp(
     Provider(
