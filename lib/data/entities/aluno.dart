@@ -5,9 +5,10 @@ import 'package:gerenciador_matriculas/data/entities/user.dart';
 
 class Aluno extends User {
   String matricula;
-  String turma;
+  String curso;
   String classe;
-  String status;
+  String turma;
+  bool status;
   Aluno({
     required super.id,
     required super.nome,
@@ -15,6 +16,7 @@ class Aluno extends User {
     required super.telefone,
     required this.matricula,
     required this.turma,
+    required this.curso,
     required this.classe,
     required this.status,
   });
@@ -25,8 +27,9 @@ class Aluno extends User {
     String? email,
     String? matricula,
     String? turma,
+    String? curso,
     String? classe,
-    String? status,
+    bool? status,
     String? telefone,
   }) {
     return Aluno(
@@ -35,6 +38,7 @@ class Aluno extends User {
       email: email ?? this.email,
       matricula: matricula ?? this.matricula,
       turma: turma ?? this.turma,
+      curso: curso ?? this.curso,
       classe: classe ?? this.classe,
       status: status ?? this.status,
       telefone: telefone ?? this.telefone,
@@ -48,6 +52,7 @@ class Aluno extends User {
       'email': email,
       'matricula': matricula,
       'turma': turma,
+      'curso': curso,
       'classe': classe,
       'status': status,
       'telefone': telefone,
@@ -60,9 +65,10 @@ class Aluno extends User {
       nome: map['nome'] as String,
       email: map['email'] as String,
       matricula: map['matricula'] as String,
+      curso: map['curso'] as String,
       turma: map['turma'] as String,
       classe: map['classe'] as String,
-      status: map['status'] as String,
+      status: map['status'] as bool,
       telefone: map['telefone'] as String,
     );
   }

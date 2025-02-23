@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerenciador_matriculas/data/entities/user.dart';
 import 'package:gerenciador_matriculas/dependencies.dart';
 import 'package:gerenciador_matriculas/features/client_login/client_login.dart';
@@ -35,14 +36,14 @@ class AdminHomeDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.group),
+            leading: Icon(FontAwesomeIcons.users),
             title: Text('Usuários'),
             onTap: () {
               Navigator.pop(context);
             },
           ),
           ListTile(
-            leading: Icon(Icons.message),
+            leading: Icon(FontAwesomeIcons.message),
             title: Text('Reclamações'),
             onTap: () {
               Navigator.pop(context);
