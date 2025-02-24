@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerenciador_matriculas/data/entities/user.dart';
 import 'package:gerenciador_matriculas/dependencies.dart';
 import 'package:gerenciador_matriculas/features/admin_login/view/admin_login_page.dart';
+import 'package:gerenciador_matriculas/features/alunos/view/alunos_page.dart';
 
 class AdminHomeDrawer extends StatelessWidget {
   const AdminHomeDrawer({super.key});
@@ -20,7 +21,7 @@ class AdminHomeDrawer extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                user.email,
+                user.nome,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimary,
                   fontSize: 24,
@@ -30,21 +31,21 @@ class AdminHomeDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.book),
-            title: Text('Matrículas'),
+            title: Text('Alunos'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(context, AlunosPage.route());
             },
           ),
           ListTile(
-            leading: Icon(FontAwesomeIcons.users),
-            title: Text('Usuários'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: Icon(FontAwesomeIcons.message),
+            leading: Icon(Icons.message),
             title: Text('Reclamações'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: Icon(FontAwesomeIcons.print),
+            title: Text('Relátorios'),
             onTap: () {
               Navigator.pop(context);
             },
@@ -52,7 +53,7 @@ class AdminHomeDrawer extends StatelessWidget {
           Spacer(),
           ListTile(
             leading: Icon(Icons.logout),
-            title: Text('Sair'),
+            title: Text('Terminar sessão'),
             onTap: () {
               getIt.unregister<User>();
               Navigator.pushReplacement(context, AdminLoginPage.route());

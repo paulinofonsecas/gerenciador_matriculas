@@ -35,9 +35,12 @@ class ClientLoginView extends StatelessWidget {
           getIt.unregister<User>();
           getIt.registerSingleton(state.user);
 
-          Navigator.of(context).pushReplacement(AlunoHomePage.route());
+          Navigator.of(context).pushAndRemoveUntil(
+            AlunoHomePage.route(),
+            (route) => false,
+          );
         }
- 
+
         if (state is ClientLoginFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

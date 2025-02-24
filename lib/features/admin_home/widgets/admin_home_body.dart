@@ -41,6 +41,14 @@ class AdminHomeBody extends StatelessWidget {
               Navigator.pushNamed(context, '/create_disciplina');
             },
           ),
+          ButtonPanelWidget(
+            title: 'Administradores',
+            icon: Icons.admin_panel_settings,
+            color: Colors.blue,
+            onTap: () {
+              Navigator.pushNamed(context, '/create_disciplina');
+            },
+          ),
         ],
       ),
     );
