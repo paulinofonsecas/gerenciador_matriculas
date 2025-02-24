@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:gerenciador_matriculas/data/entities/aluno.dart';
+import 'package:gerenciador_matriculas/features/aluno_details/dialogs/create_user_dialog.dart';
 
 import 'duet_info.dart';
 
@@ -54,14 +55,15 @@ class AlunoDetailsBody extends StatelessWidget {
               ),
             ),
           ),
-          DuetInfo(title: 'Email', subtitle: aluno.email),
           DuetInfo(
             title: 'Estado',
             subtitle: aluno.status == true ? 'Ativo' : 'Inativo',
           ),
           Gutter(),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              CreateUserDialog.show(context, aluno);
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).primaryColor,
               foregroundColor: Colors.white,
@@ -71,6 +73,22 @@ class AlunoDetailsBody extends StatelessWidget {
             ),
             child: const Text('Criar novo Usuário'),
           ),
+          if (aluno.status == true)
+            ElevatedButton(
+              onPressed: () {
+                CreateUserDialog.show(context, aluno, true);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorScheme.fromSeed(seedColor: Colors.red)
+                    .primaryContainer,
+                foregroundColor: ColorScheme.fromSeed(seedColor: Colors.red)
+                    .onPrimaryContainer,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text('Redefinir Senha'),
+            ),
         ],
       ),
     );
