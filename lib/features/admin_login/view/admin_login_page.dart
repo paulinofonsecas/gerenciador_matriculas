@@ -31,7 +31,9 @@ class AdminLoginView extends StatelessWidget {
     return BlocListener<AdminLoginCubit, AdminLoginState>(
       listener: (context, state) async {
         if (state is AdminLoginSuccess) {
-          getIt.unregister<User>();
+          if (getIt.isRegistered<User>()) {
+            getIt.unregister<User>();
+          }
           getIt.registerSingleton(state.user);
 
           Navigator.of(context).pushReplacement(AdminHomePage.route());

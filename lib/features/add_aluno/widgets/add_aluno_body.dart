@@ -19,10 +19,12 @@ class AddAlunoBody extends StatefulWidget {
 
 class _AddAlunoBodyState extends State<AddAlunoBody> {
   final _formKey = GlobalKey<FormState>();
-  var alunoParams = AlunoParams();
 
   @override
   Widget build(BuildContext context) {
+    final aluno = context.read<AddAlunoCubit>().aluno;
+    var alunoParams = AlunoParams.fromAluno(aluno);
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Form(
@@ -30,6 +32,7 @@ class _AddAlunoBodyState extends State<AddAlunoBody> {
         child: ListView(
           children: [
             TextFormField(
+              initialValue: aluno?.nome,
               onChanged: (value) {
                 alunoParams = alunoParams.copyWith(
                   nome: value,
@@ -52,6 +55,7 @@ class _AddAlunoBodyState extends State<AddAlunoBody> {
             ),
             Gutter(),
             TextFormField(
+              initialValue: aluno?.matricula,
               onChanged: (value) {
                 alunoParams = alunoParams.copyWith(
                   matricula: value,
@@ -74,6 +78,7 @@ class _AddAlunoBodyState extends State<AddAlunoBody> {
             ),
             Gutter(),
             TextFormField(
+              initialValue: aluno?.curso,
               onChanged: (value) {
                 alunoParams = alunoParams.copyWith(
                   curso: value,
@@ -96,6 +101,7 @@ class _AddAlunoBodyState extends State<AddAlunoBody> {
             ),
             Gutter(),
             TextFormField(
+              initialValue: aluno?.classe,
               onChanged: (value) {
                 alunoParams = alunoParams.copyWith(
                   classe: value,
@@ -118,6 +124,7 @@ class _AddAlunoBodyState extends State<AddAlunoBody> {
             ),
             Gutter(),
             TextFormField(
+              initialValue: aluno?.turma,
               onChanged: (value) {
                 alunoParams = alunoParams.copyWith(
                   turma: value,
@@ -140,6 +147,7 @@ class _AddAlunoBodyState extends State<AddAlunoBody> {
             ),
             Gutter(),
             TextFormField(
+              initialValue: aluno?.telefone,
               onChanged: (value) {
                 alunoParams = alunoParams.copyWith(
                   telefone: value,

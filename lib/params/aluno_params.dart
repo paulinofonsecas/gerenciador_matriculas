@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:gerenciador_matriculas/data/entities/aluno.dart';
+
 class AlunoParams {
   final String nome;
   final String matricula;
@@ -88,5 +90,16 @@ class AlunoParams {
         classe.hashCode ^
         turma.hashCode ^
         telefone.hashCode;
+  }
+
+  static fromAluno(Aluno? aluno) {
+    return AlunoParams(
+      nome: aluno?.nome ?? '',
+      matricula: aluno?.matricula ?? '',
+      curso: aluno?.curso ?? '',
+      classe: aluno?.classe ?? '',
+      turma: aluno?.turma ?? '',
+      telefone: aluno?.telefone ?? '',
+    );
   }
 }

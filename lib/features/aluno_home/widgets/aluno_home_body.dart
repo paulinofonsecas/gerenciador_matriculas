@@ -46,7 +46,9 @@ class AlunoHomeBody extends StatelessWidget {
           GutterLarge(),
           ElevatedButton(
             onPressed: () {
-              getIt.unregister<User>();
+              if (getIt.isRegistered<User>()) {
+                getIt.unregister<User>();
+              }
               Navigator.pushReplacement(context, ClientLoginPage.route());
             },
             style: ElevatedButton.styleFrom(

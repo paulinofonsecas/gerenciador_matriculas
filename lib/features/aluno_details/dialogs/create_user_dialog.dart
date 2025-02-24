@@ -18,6 +18,7 @@ class CreateUserDialog extends StatefulWidget {
       [bool autoGeneratePassword = false]) async {
     return showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (_) => CreateUserDialog(
         aluno: aluno,
         autoGeneratePassword: autoGeneratePassword,
@@ -34,6 +35,14 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
   var _isCreatingUser = false;
   var _generatedPassword = '';
   var _isCreated = false;
+
+  @override
+  initState() {
+    super.initState();
+    if (widget.autoGeneratePassword) {
+      _updateUser();
+    }
+  }
 
   String gp() {
     final passwordGenerator = PasswordGenerator(
@@ -58,7 +67,7 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
     await _firestore
         .collection('alunos')
         .doc(widget.aluno.id)
-        .update({'user.password': newPassword});
+        .set({'user.password': newPassword});
 
     _generatedPassword = newPassword;
     setState(() {
@@ -68,12 +77,21 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
     });
   }
 
-  @override
-  initState() {
-    super.initState();
-    if (widget.autoGeneratePassword) {
-      _createUser();
-    }
+  void _updateUser() async {
+    setState(() => _isCreatingUser = true);
+    final newPassword = gp();
+
+    await _firestore
+        .collection('alunos')
+        .doc(widget.aluno.id)
+        .update({'user.password': newPassword});
+
+    _generatedPassword = newPassword;
+    setState(() {
+      _isCreatingUser = false;
+      _generatedPassword = _generatedPassword;
+      _isCreated = true;
+    });
   }
 
   @override

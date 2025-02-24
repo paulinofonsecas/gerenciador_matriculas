@@ -34,6 +34,13 @@ class AddAlunoSuccess extends AddAlunoState {
   List<Object> get props => [];
 }
 
+class EditAlunoSuccess extends AddAlunoState {
+  const EditAlunoSuccess() : super();
+
+  @override
+  List<Object> get props => [];
+}
+
 class AddAlunoFailure extends AddAlunoState {
   const AddAlunoFailure() : super();
 }

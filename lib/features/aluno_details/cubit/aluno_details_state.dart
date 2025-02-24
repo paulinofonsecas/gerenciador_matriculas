@@ -24,10 +24,28 @@ class AlunoDetailsState extends Equatable {
     );
   }
 }
+
 /// {@template aluno_details_initial}
 /// The initial state of AlunoDetailsState
 /// {@endtemplate}
 class AlunoDetailsInitial extends AlunoDetailsState {
   /// {@macro aluno_details_initial}
   const AlunoDetailsInitial() : super();
+}
+
+class AlunoDetailsLoading extends AlunoDetailsState {
+  const AlunoDetailsLoading() : super();
+}
+
+class AlunoDetailsLoaded extends AlunoDetailsState {
+  const AlunoDetailsLoaded(this.aluno) : super();
+
+  final Aluno aluno;
+
+  @override
+  List<Object> get props => [aluno];
+}
+
+class AlunoDetailsError extends AlunoDetailsState {
+  const AlunoDetailsError() : super();
 }
