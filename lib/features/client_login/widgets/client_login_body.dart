@@ -85,6 +85,11 @@ class _ClientLoginBodyState extends State<ClientLoginBody> {
                   Gutter(),
                   TextButton(
                     onPressed: () {
+                      if (context.read<ClientLoginCubit>().state
+                          is ClientLoginSuccess) {
+                        return;
+                      }
+
                       Navigator.of(context).push(AdminLoginPage.route());
                     },
                     style: TextButton.styleFrom(

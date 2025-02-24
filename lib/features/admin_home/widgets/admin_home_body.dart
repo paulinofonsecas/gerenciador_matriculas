@@ -12,7 +12,7 @@ class AdminHomeBody extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: GridView(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
