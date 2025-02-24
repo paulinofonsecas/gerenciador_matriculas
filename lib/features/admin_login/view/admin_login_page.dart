@@ -1,44 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_matriculas/data/entities/user.dart';
-import 'package:gerenciador_matriculas/data/services/auth_firebase.dart';
 import 'package:gerenciador_matriculas/dependencies.dart';
 import 'package:gerenciador_matriculas/features/admin_home/view/admin_home_page.dart';
-import 'package:gerenciador_matriculas/features/client_login/cubit/cubit.dart';
-import 'package:gerenciador_matriculas/features/client_login/widgets/client_login_body.dart';
+import 'package:gerenciador_matriculas/features/admin_login/cubit/cubit.dart';
+import 'package:gerenciador_matriculas/features/admin_login/widgets/admin_login_body.dart';
 
-class ClientLoginPage extends StatelessWidget {
-  const ClientLoginPage({super.key});
+class AdminLoginPage extends StatelessWidget {
+  const AdminLoginPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<dynamic>(builder: (_) => const ClientLoginPage());
+    return MaterialPageRoute<dynamic>(builder: (_) => const AdminLoginPage());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ClientLoginCubit(context.read<AuthFirebase>()),
-      child: Scaffold(
-        body: ClientLoginView(),
+      create: (context) => AdminLoginCubit(context.read()),
+      child: const Scaffold(
+        body: AdminLoginView(),
       ),
     );
   }
 }
 
-class ClientLoginView extends StatelessWidget {
-  const ClientLoginView({super.key});
+class AdminLoginView extends StatelessWidget {
+  const AdminLoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ClientLoginCubit, ClientLoginState>(
+    return BlocListener<AdminLoginCubit, AdminLoginState>(
       listener: (context, state) async {
-        if (state is ClientLoginSuccess) {
+        if (state is AdminLoginSuccess) {
           getIt.unregister<User>();
           getIt.registerSingleton(state.user);
 
           Navigator.of(context).pushReplacement(AdminHomePage.route());
         }
 
-        if (state is ClientLoginFailure) {
+        if (state is AdminLoginFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Erro ao realizar login'),
@@ -46,7 +45,7 @@ class ClientLoginView extends StatelessWidget {
           );
         }
       },
-      child: const ClientLoginBody(),
+      child: const AdminLoginBody(),
     );
   }
 }

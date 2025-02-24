@@ -9,6 +9,7 @@ class Aluno extends User {
   String classe;
   String turma;
   bool status;
+
   Aluno({
     required super.id,
     required super.nome,

@@ -8,24 +8,24 @@ import 'package:gerenciador_matriculas/data/entities/user.dart';
 import 'package:gerenciador_matriculas/data/services/auth_firebase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-part 'client_login_state.dart';
+part 'admin_login_state.dart';
 
-class ClientLoginCubit extends Cubit<ClientLoginState> {
-  ClientLoginCubit(this._authFirebase) : super(const ClientLoginInitial());
+class AdminLoginCubit extends Cubit<AdminLoginState> {
+  AdminLoginCubit(this._authFirebase) : super(const AdminLoginInitial());
 
   final AuthFirebase _authFirebase;
 
-  Future<void> login(String matricula, String password) async {
-    emit(const ClientLoginLoading());
+  Future<void> login(String email, String password) async {
+    emit(const AdminLoginLoading());
 
     try {
-      final user = await _authFirebase.loginAluno(matricula, password);
+      final user = await _authFirebase.login(email, password);
 
       await _saveUser(user);
 
-      emit(ClientLoginSuccess(user));
+      emit(AdminLoginSuccess(user));
     } catch (e) {
-      emit(ClientLoginFailure(e.toString()));
+      emit(AdminLoginFailure(e.toString()));
     }
   }
 

@@ -54,6 +54,7 @@ class AdminHomeDrawer extends StatelessWidget {
             leading: Icon(Icons.logout),
             title: Text('Sair'),
             onTap: () {
+              getIt.unregister<User>();
               Navigator.pushReplacement(context, ClientLoginPage.route());
             },
           ),

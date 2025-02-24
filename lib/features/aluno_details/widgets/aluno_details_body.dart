@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:gerenciador_matriculas/data/entities/aluno.dart';
 
+import 'duet_info.dart';
+
 class AlunoDetailsBody extends StatelessWidget {
   const AlunoDetailsBody({super.key, required this.aluno});
 
@@ -11,7 +13,7 @@ class AlunoDetailsBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
+      child: ListView(
         children: [
           Align(
             child: CircleAvatar(
@@ -25,6 +27,7 @@ class AlunoDetailsBody extends StatelessWidget {
           Gutter(),
           Text(
             aluno.nome,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -38,36 +41,35 @@ class AlunoDetailsBody extends StatelessWidget {
           DuetInfo(title: 'Classe', subtitle: aluno.classe),
           DuetInfo(title: 'Turma', subtitle: aluno.turma),
           DuetInfo(title: 'Telefone', subtitle: aluno.telefone),
-        ],
-      ),
-    );
-  }
-}
-
-class DuetInfo extends StatelessWidget {
-  const DuetInfo({super.key, required this.title, required this.subtitle});
-
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Text(
-            '$title: ',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
+          Gutter(),
+          Divider(),
+          Gutter(),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Informações adicionais',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              fontSize: 16,
+          DuetInfo(title: 'Email', subtitle: aluno.email),
+          DuetInfo(
+            title: 'Estado',
+            subtitle: aluno.status == true ? 'Ativo' : 'Inativo',
+          ),
+          Gutter(),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).primaryColor,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
+            child: const Text('Criar novo Usuário'),
           ),
         ],
       ),

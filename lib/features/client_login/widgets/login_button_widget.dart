@@ -5,16 +5,12 @@ import 'package:gerenciador_matriculas/features/client_login/cubit/client_login_
 class LoginButtonWidget extends StatelessWidget {
   const LoginButtonWidget({
     super.key,
-    required GlobalKey<FormState> formKey,
-    required TextEditingController emailController,
-    required TextEditingController senhaController,
-  })  : _formKey = formKey,
-        _emailController = emailController,
-        _senhaController = senhaController;
+    required this.title,
+    this.onTap,
+  });
 
-  final GlobalKey<FormState> _formKey;
-  final TextEditingController _emailController;
-  final TextEditingController _senhaController;
+  final String title;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -35,15 +31,8 @@ class LoginButtonWidget extends StatelessWidget {
               foregroundColor: Colors.white,
               backgroundColor: Theme.of(context).colorScheme.primary,
             ),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                context.read<ClientLoginCubit>().login(
-                      _emailController.text,
-                      _senhaController.text,
-                    );
-              }
-            },
-            child: Text('Entrar'),
+            onPressed: onTap,
+            child: Text(title),
           );
         },
       ),
