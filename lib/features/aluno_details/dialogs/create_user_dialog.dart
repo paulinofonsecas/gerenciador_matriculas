@@ -64,10 +64,10 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
     setState(() => _isCreatingUser = true);
     final newPassword = gp();
 
-    await _firestore
-        .collection('alunos')
-        .doc(widget.aluno.id)
-        .set({'user.password': newPassword});
+    await _firestore.collection('alunos').doc(widget.aluno.id).update({
+      'status': true,
+      'user.password': newPassword,
+    });
 
     _generatedPassword = newPassword;
     setState(() {

@@ -52,25 +52,39 @@ class _DeleteUserDialogState extends State<DeleteUserDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Excluir usuário'),
-      content: const Text('Tem certeza que deseja excluir o usuário?'),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Cancelar'),
-        ),
-        TextButton(
-          onPressed: _deleteUser,
-          style: TextButton.styleFrom(
-            backgroundColor: ColorScheme.fromSeed(
-              seedColor: Colors.red,
-            ).error,
-            foregroundColor: Theme.of(context).colorScheme.onError,
-          ),
-          child: const Text('Excluir'),
-        ),
-      ],
+      content: Builder(builder: (context) {
+        if (_isLoading) {
+          return SizedBox(
+            width: 50,
+            height: 50,
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        return const Text('Tem certeza que deseja excluir o usuário?');
+      }),
+      actions: _isLoading
+          ? null
+          : [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancelar'),
+              ),
+              TextButton(
+                onPressed: _deleteUser,
+                style: TextButton.styleFrom(
+                  backgroundColor: ColorScheme.fromSeed(
+                    seedColor: Colors.red,
+                  ).error,
+                  foregroundColor: Theme.of(context).colorScheme.onError,
+                ),
+                child: const Text('Excluir'),
+              ),
+            ],
     );
   }
 }
+
+// 9mh860

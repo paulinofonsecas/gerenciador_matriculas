@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:gerenciador_matriculas/data/entities/aluno.dart';
+import 'package:gerenciador_matriculas/features/admin_home/cubit/cubit.dart';
+import 'package:gerenciador_matriculas/features/aluno_details/cubit/aluno_details_cubit.dart';
 import 'package:gerenciador_matriculas/features/aluno_details/dialogs/create_user_dialog.dart';
 import 'package:gerenciador_matriculas/features/aluno_details/dialogs/delete_user_dialog.dart';
 
@@ -63,7 +65,9 @@ class AlunoDetailsBody extends StatelessWidget {
           Gutter(),
           ElevatedButton(
             onPressed: () {
-              CreateUserDialog.show(context, aluno);
+              CreateUserDialog.show(context, aluno).then((_) {
+                context.read<AlunoDetailsCubit>().getAluno(aluno.id);
+              });
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).primaryColor,
@@ -77,7 +81,9 @@ class AlunoDetailsBody extends StatelessWidget {
           if (aluno.status == true) ...[
             ElevatedButton(
               onPressed: () {
-                CreateUserDialog.show(context, aluno, true);
+                CreateUserDialog.show(context, aluno, true).then((_) {
+                  context.read<AlunoDetailsCubit>().getAluno(aluno.id);
+                });
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: ColorScheme.fromSeed(seedColor: Colors.amber)
@@ -92,7 +98,9 @@ class AlunoDetailsBody extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                DeleteUserDialog.show(context, aluno);
+                DeleteUserDialog.show(context, aluno).then((_) {
+                  context.read<AlunoDetailsCubit>().getAluno(aluno.id);
+                });
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor:
