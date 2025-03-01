@@ -40,6 +40,11 @@ class AddAlunoView extends StatelessWidget {
       listener: (context, state) {
         if (state is AddAlunoSuccess) {
           Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Aluno cadastrado com sucesso.'),
+            ),
+          );
         }
 
         if (state is EditAlunoSuccess) {

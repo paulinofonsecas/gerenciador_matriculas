@@ -17,7 +17,8 @@ class _AlunosBodyState extends State<AlunosBody> {
   Widget build(BuildContext context) {
     return StreamBuilder<List<Aluno>>(
         stream: firestore.collection('alunos').snapshots().map((snapshot) =>
-            snapshot.docs.map((doc) => Aluno.fromMap(doc.data())).toList()),
+            snapshot.docs.map((doc) => Aluno.fromMap(doc.data())).toList()
+              ..sort((a, b) => a.nome.compareTo(b.nome))),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text('Erro ao carregar os dados');

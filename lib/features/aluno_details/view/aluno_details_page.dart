@@ -33,6 +33,12 @@ class AlunoDetailsPage extends StatelessWidget {
               listener: (context, state) {
                 if (state is DeletarAlunoSuccess) {
                   Navigator.of(context).pop();
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Aluno deletado com sucesso'),
+                    ),
+                  );
                 }
 
                 if (state is DeletarAlunoError) {
@@ -53,7 +59,36 @@ class AlunoDetailsPage extends StatelessWidget {
 
                 return IconButton(
                   onPressed: () {
-                    context.read<DeletarAlunoCubit>().deletarAluno(aluno.id);
+                    final cubit = context.read<DeletarAlunoCubit>();
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Confirmar Deleção'),
+                          content: const Text(
+                              'Você tem certeza que deseja deletar este aluno?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancelar'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                cubit.deletarAluno(aluno.id);
+                              },
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.red,
+                              ),
+                              child: const Text('Deletar'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                   icon: const Icon(Icons.delete),
                 );
