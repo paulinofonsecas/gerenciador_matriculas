@@ -11,7 +11,16 @@ class AlunosBody extends StatefulWidget {
 }
 
 class _AlunosBodyState extends State<AlunosBody> {
+  final _searchController = TextEditingController();
   final firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    _searchController.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,28 +45,54 @@ class _AlunosBodyState extends State<AlunosBody> {
             );
           }
 
-          final alunos = snapshot.data!;
+          final alunos = snapshot.data!.where((aluno) {
+            final nome = aluno.nome.toLowerCase();
+            final search = _searchController.text.toLowerCase();
+            return nome.contains(search);
+          }).toList();
 
-          return ListView.builder(
-            itemCount: alunos.length,
-            itemBuilder: (context, index) {
-              final aluno = alunos[index];
-
-              return ListTile(
-                onTap: () {
-                  Navigator.of(context).push(AlunoDetailsPage.route(aluno));
-                },
-                title: Text(aluno.nome),
-                subtitle: Text(
-                    '${aluno.classe}ª classe, Matrícula: ${aluno.matricula}'),
-                leading: CircleAvatar(
-                  child: Center(
-                    child: Text(aluno.nome[0].toUpperCase()),
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: const InputDecoration(
+                    labelText: 'Pesquisar',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                    ),
                   ),
                 ),
-                trailing: const Icon(Icons.keyboard_arrow_right),
-              );
-            },
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: alunos.length,
+                  itemBuilder: (context, index) {
+                    final aluno = alunos[index];
+
+                    return ListTile(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(AlunoDetailsPage.route(aluno));
+                      },
+                      title: Text(aluno.nome),
+                      subtitle: Text(
+                          '${aluno.classe}ª classe, Matrícula: ${aluno.matricula}'),
+                      leading: CircleAvatar(
+                        child: Center(
+                          child: Text(aluno.nome[0].toUpperCase()),
+                        ),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         });
   }

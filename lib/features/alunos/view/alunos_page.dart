@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gutter/flutter_gutter.dart';
 import 'package:gerenciador_matriculas/features/add_aluno/add_aluno.dart';
 import 'package:gerenciador_matriculas/features/alunos/cubit/cubit.dart';
 import 'package:gerenciador_matriculas/features/alunos/widgets/alunos_body.dart';
@@ -16,13 +15,7 @@ class AlunosPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => AlunosCubit(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Alunos'), actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
-          ),
-          GutterSmall(),
-        ]),
+        appBar: AppBar(title: const Text('Alunos'), actions: []),
         body: AlunosView(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
