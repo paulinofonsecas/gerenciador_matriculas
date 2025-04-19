@@ -32,7 +32,7 @@ class ClientLoginView extends StatelessWidget {
     return BlocListener<ClientLoginCubit, ClientLoginState>(
       listener: (context, state) async {
         if (state is ClientLoginSuccess) {
-          getIt.unregister<User>();
+          if (getIt.isRegistered<User>()) getIt.unregister<User>();
           getIt.registerSingleton(state.user);
 
           Navigator.of(context).pushAndRemoveUntil(

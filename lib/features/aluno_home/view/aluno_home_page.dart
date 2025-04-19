@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_matriculas/features/aluno_home/cubit/cubit.dart';
 import 'package:gerenciador_matriculas/features/aluno_home/widgets/aluno_home_body.dart';
+import 'package:gerenciador_matriculas/features/aluno_home/view/reclamacao_page.dart';
 
 class AlunoHomePage extends StatelessWidget {
   const AlunoHomePage({super.key});
@@ -16,7 +17,11 @@ class AlunoHomePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(title: const Text('Página Inicial'), actions: [
           TextButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const ReclamacaoPage()),
+              );
+            },
             icon: const Icon(Icons.message_sharp),
             label: const Text('Reclamar'),
           ),

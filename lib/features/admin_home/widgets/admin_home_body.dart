@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gerenciador_matriculas/features/admin_home/view/reclamacoes_admin_page.dart';
 import 'package:gerenciador_matriculas/features/alunos/view/alunos_page.dart';
 
 import 'button_panel_widget.dart';
@@ -30,7 +31,7 @@ class AdminHomeBody extends StatelessWidget {
             icon: Icons.message,
             color: Colors.orange,
             onTap: () {
-              Navigator.pushNamed(context, '/create_professor');
+              Navigator.push(context, ReclamacoesAdminPage.route());
             },
           ),
           ButtonPanelWidget(

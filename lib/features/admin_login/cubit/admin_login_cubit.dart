@@ -7,6 +7,7 @@ import 'package:gerenciador_matriculas/data/entities/aluno.dart';
 import 'package:gerenciador_matriculas/data/entities/user.dart';
 import 'package:gerenciador_matriculas/data/services/auth_firebase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gerenciador_matriculas/data/services/login_cache.dart';
 
 part 'admin_login_state.dart';
 
@@ -22,7 +23,9 @@ class AdminLoginCubit extends Cubit<AdminLoginState> {
       final user = await _authFirebase.login(email, password);
 
       await _saveUser(user);
-
+      if (user is Administrador) {
+        await LoginCache.saveAdmin(email, password);
+      }
       emit(AdminLoginSuccess(user));
     } catch (e) {
       emit(AdminLoginFailure(e.toString()));

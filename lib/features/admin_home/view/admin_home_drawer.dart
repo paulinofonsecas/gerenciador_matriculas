@@ -4,6 +4,8 @@ import 'package:gerenciador_matriculas/data/entities/user.dart';
 import 'package:gerenciador_matriculas/dependencies.dart';
 import 'package:gerenciador_matriculas/features/admin_login/view/admin_login_page.dart';
 import 'package:gerenciador_matriculas/features/alunos/view/alunos_page.dart';
+import 'package:gerenciador_matriculas/features/admin_home/view/reclamacoes_admin_page.dart';
+import 'package:gerenciador_matriculas/features/relatorios/relatorios_admin_page.dart';
 
 class AdminHomeDrawer extends StatelessWidget {
   const AdminHomeDrawer({super.key});
@@ -40,14 +42,18 @@ class AdminHomeDrawer extends StatelessWidget {
             leading: Icon(Icons.message),
             title: Text('Reclamações'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const ReclamacoesAdminPage()),
+              );
             },
           ),
           ListTile(
             leading: Icon(FontAwesomeIcons.print),
             title: Text('Relátorios'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const RelatoriosAdminPage()),
+              );
             },
           ),
           Spacer(),

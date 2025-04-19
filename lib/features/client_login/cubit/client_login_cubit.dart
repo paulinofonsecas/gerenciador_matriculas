@@ -7,6 +7,7 @@ import 'package:gerenciador_matriculas/data/entities/aluno.dart';
 import 'package:gerenciador_matriculas/data/entities/user.dart';
 import 'package:gerenciador_matriculas/data/services/auth_firebase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gerenciador_matriculas/data/services/login_cache.dart';
 
 part 'client_login_state.dart';
 
@@ -22,6 +23,9 @@ class ClientLoginCubit extends Cubit<ClientLoginState> {
       final user = await _authFirebase.loginAluno(matricula, password);
 
       await _saveUser(user);
+      if (user is Aluno) {
+        await LoginCache.saveAluno(user.matricula, password!);
+      }
 
       emit(ClientLoginSuccess(user));
     } catch (e) {
