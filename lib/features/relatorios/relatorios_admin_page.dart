@@ -142,7 +142,7 @@ class _RelatoriosAdminPageState extends State<RelatoriosAdminPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Relatórios de Usuários (Admin)')),
+      appBar: AppBar(title: const Text('Relatórios de Alunos')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -231,7 +231,7 @@ class _RelatoriosAdminPageState extends State<RelatoriosAdminPage> {
                       label: Container(
                         padding: const EdgeInsets.all(16),
                         alignment: Alignment.centerLeft,
-                        child: const Text('Status',
+                        child: const Text('Ativo',
                             style: TextStyle(color: Colors.white)),
                       ),
                     ),
@@ -275,7 +275,7 @@ class UsersReportDataSource extends DataGridSource {
               DataGridCell<String>(columnName: 'curso', value: u.curso),
               DataGridCell<String>(columnName: 'classe', value: u.classe),
               DataGridCell<String>(columnName: 'turma', value: u.turma),
-              DataGridCell<bool>(columnName: 'status', value: u.status),
+              DataGridCell<String>(columnName: 'status', value: u.status ? 'Sim' : 'Não'),
             ]))
         .toList();
   }

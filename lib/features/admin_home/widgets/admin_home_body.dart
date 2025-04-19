@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_matriculas/features/admin_home/view/reclamacoes_admin_page.dart';
 import 'package:gerenciador_matriculas/features/alunos/view/alunos_page.dart';
+import 'package:gerenciador_matriculas/features/relatorios/relatorios_admin_page.dart';
 
 import 'button_panel_widget.dart';
 
@@ -39,7 +40,7 @@ class AdminHomeBody extends StatelessWidget {
             icon: Icons.print,
             color: Colors.purple,
             onTap: () {
-              Navigator.pushNamed(context, '/create_disciplina');
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const RelatoriosAdminPage()));
             },
           ),
           ButtonPanelWidget(
