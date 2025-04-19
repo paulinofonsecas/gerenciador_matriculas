@@ -1,6 +1,8 @@
-import 'dart:io';
+import 'dart:io' as io;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gerenciador_matriculas/features/relatorios/relatorios_pdf_web.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
@@ -20,7 +22,7 @@ class _RelatoriosAdminPageState extends State<RelatoriosAdminPage> {
   final GlobalKey<SfDataGridState> _dataGridKey = GlobalKey<SfDataGridState>();
   bool _loading = false;
   String? _status;
-  List<UserReportModel> _users = [];
+  List<AlunoReportModel> _users = [];
 
   @override
   void initState() {
@@ -31,13 +33,26 @@ class _RelatoriosAdminPageState extends State<RelatoriosAdminPage> {
   Future<void> _fetchUsers() async {
     setState(() => _loading = true);
     try {
-      final querySnapshot = await FirebaseFirestore.instance.collection('usuarios').get();
+      final querySnapshot =
+          await FirebaseFirestore.instance.collection('alunos').get();
+
+      /* Extrutura
+      String matricula;
+      String curso;
+      String classe;
+      String turma;
+      bool status;
+      */
+
       final users = querySnapshot.docs.map((doc) {
         final data = doc.data();
-        return UserReportModel(
-          name: data['name'] ?? '',
-          email: data['email'] ?? '',
-          role: data['role'] ?? '',
+        return AlunoReportModel(
+          name: data['nome'] ?? '',
+          matricula: data['matricula'] ?? '',
+          curso: data['curso'] ?? '',
+          classe: data['classe'] ?? '',
+          turma: data['turma'] ?? '',
+          status: data['status'] ?? false,
         );
       }).toList();
       setState(() {
@@ -52,52 +67,75 @@ class _RelatoriosAdminPageState extends State<RelatoriosAdminPage> {
     }
   }
 
-  Future<void> _exportarPDF() async {
-    final result = await Permission.manageExternalStorage.request().isGranted;
-    if (!result) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sem permissão para exportar para PDF')),
-      );
-      return;
-    }
+  Uint8List makePdfContent() {
     final document = PdfDocument();
+
     final pdfPage = document.pages.add();
-    final headerTemplate = PdfPageTemplateElement(const Rect.fromLTWH(0, 0, 515, 50));
+    final headerTemplate =
+        PdfPageTemplateElement(const Rect.fromLTWH(0, 0, 515, 50));
     headerTemplate.graphics.drawString(
       'Relatório de usuários',
       PdfStandardFont(PdfFontFamily.helvetica, 12),
       bounds: const Rect.fromLTWH(0, 15, 200, 20),
     );
     document.template.top = headerTemplate;
+
     final dataGridState = _dataGridKey.currentState;
     if (dataGridState != null) {
       dataGridState.exportToPdfGrid().draw(
-        page: pdfPage,
-        bounds: Rect.zero,
-      );
+            page: pdfPage,
+            bounds: Rect.zero,
+          );
     }
+
     final bytes = document.saveSync();
-    final dir = await path.getApplicationDocumentsDirectory();
-    final relatoriosDir = Directory('${dir.absolute.path}/relatorios');
-    if (!relatoriosDir.existsSync()) {
-      relatoriosDir.createSync(recursive: true);
-    }
-    final fileName = 'relatorio_de_usuarios_${DateTime.now().millisecondsSinceEpoch}.pdf';
-    final file = File('${relatoriosDir.path}/$fileName')
-      ..createSync(recursive: true)
-      ..writeAsBytesSync(bytes);
-    final result0 = await Share.shareXFiles(
-      [XFile(file.path)],
-      text: 'Relatório de usuários',
-    );
-    if (result0.status == ShareResultStatus.success) {
+    final bytesToSave = Uint8List.fromList(bytes);
+
+    return bytesToSave;
+  }
+
+  Future<void> _exportarPDF() async {
+    final bytesToSave = makePdfContent();
+    final fileName =
+        'relatorio_de_usuarios_${DateTime.now().millisecondsSinceEpoch}.pdf';
+
+    if (kIsWeb) {
+      // Usar método web para download
+      savePdfOnWeb(bytesToSave, fileName);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('PDF compartilhado com sucesso!')),
+        const SnackBar(content: Text('PDF gerado e baixado com sucesso!')),
       );
+      return;
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Ocorreu um erro ao exportar para PDF')),
+      // Mobile/desktop
+      bool result = await Permission.manageExternalStorage.request().isGranted;
+      if (!result) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sem permissão para exportar para PDF')),
+        );
+        return;
+      }
+      final dir = await path.getApplicationDocumentsDirectory();
+      final relatoriosDir = io.Directory('${dir.absolute.path}/relatorios');
+      if (!relatoriosDir.existsSync()) {
+        relatoriosDir.createSync(recursive: true);
+      }
+      final file = io.File('${relatoriosDir.path}/$fileName')
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(bytesToSave);
+      final result0 = await Share.shareXFiles(
+        [XFile(file.path)],
+        text: 'Relatório de usuários',
       );
+      if (result0.status == ShareResultStatus.success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('PDF compartilhado com sucesso!')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Ocorreu um erro ao exportar para PDF')),
+        );
+      }
     }
   }
 
@@ -120,7 +158,8 @@ class _RelatoriosAdminPageState extends State<RelatoriosAdminPage> {
                 if (_status != null)
                   Padding(
                     padding: const EdgeInsets.only(left: 16),
-                    child: Text(_status!, style: const TextStyle(color: Colors.red)),
+                    child: Text(_status!,
+                        style: const TextStyle(color: Colors.red)),
                   ),
               ],
             ),
@@ -134,6 +173,7 @@ class _RelatoriosAdminPageState extends State<RelatoriosAdminPage> {
                   key: _dataGridKey,
                   source: UsersReportDataSource(users: _users),
                   allowSorting: true,
+                  showHorizontalScrollbar: true,
                   columns: [
                     GridColumn(
                       columnName: 'name',
@@ -141,25 +181,58 @@ class _RelatoriosAdminPageState extends State<RelatoriosAdminPage> {
                       label: Container(
                         padding: const EdgeInsets.all(16),
                         alignment: Alignment.centerLeft,
-                        child: const Text('Nome', style: TextStyle(color: Colors.white)),
+                        child: const Text('Nome',
+                            style: TextStyle(color: Colors.white)),
                       ),
                     ),
                     GridColumn(
-                      columnName: 'email',
-                      columnWidthMode: ColumnWidthMode.fitByCellValue,
-                      label: Container(
-                        padding: const EdgeInsets.all(16),
-                        alignment: Alignment.centerLeft,
-                        child: const Text('Email', style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                    GridColumn(
-                      columnName: 'role',
+                      columnName: 'matricula',
                       columnWidthMode: ColumnWidthMode.fitByColumnName,
                       label: Container(
                         padding: const EdgeInsets.all(16),
                         alignment: Alignment.centerLeft,
-                        child: const Text('Tipo', style: TextStyle(color: Colors.white)),
+                        child: const Text('Matrícula',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                    GridColumn(
+                      columnName: 'curso',
+                      columnWidthMode: ColumnWidthMode.fitByCellValue,
+                      label: Container(
+                        padding: const EdgeInsets.all(16),
+                        alignment: Alignment.centerLeft,
+                        child: const Text('Curso',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                    GridColumn(
+                      columnName: 'classe',
+                      columnWidthMode: ColumnWidthMode.fitByColumnName,
+                      label: Container(
+                        padding: const EdgeInsets.all(16),
+                        alignment: Alignment.centerLeft,
+                        child: const Text('Classe',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                    GridColumn(
+                      columnName: 'turma',
+                      columnWidthMode: ColumnWidthMode.fitByColumnName,
+                      label: Container(
+                        padding: const EdgeInsets.all(16),
+                        alignment: Alignment.centerLeft,
+                        child: const Text('Turma',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                    GridColumn(
+                      columnName: 'status',
+                      columnWidthMode: ColumnWidthMode.fitByColumnName,
+                      label: Container(
+                        padding: const EdgeInsets.all(16),
+                        alignment: Alignment.centerLeft,
+                        child: const Text('Status',
+                            style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ],
@@ -173,22 +246,36 @@ class _RelatoriosAdminPageState extends State<RelatoriosAdminPage> {
   }
 }
 
-class UserReportModel {
+class AlunoReportModel {
   final String name;
-  final String email;
-  final String role;
-  UserReportModel({required this.name, required this.email, required this.role});
+  final String matricula;
+  final String curso;
+  final String classe;
+  final String turma;
+  final bool status;
+
+  AlunoReportModel({
+    required this.name,
+    required this.matricula,
+    required this.curso,
+    required this.classe,
+    required this.turma,
+    required this.status,
+  });
 }
 
 class UsersReportDataSource extends DataGridSource {
-  final List<UserReportModel> users;
+  final List<AlunoReportModel> users;
   List<DataGridRow> _rows = [];
   UsersReportDataSource({required this.users}) {
     _rows = users
         .map((u) => DataGridRow(cells: [
               DataGridCell<String>(columnName: 'name', value: u.name),
-              DataGridCell<String>(columnName: 'email', value: u.email),
-              DataGridCell<String>(columnName: 'role', value: u.role),
+              DataGridCell<String>(columnName: 'matricula', value: u.matricula),
+              DataGridCell<String>(columnName: 'curso', value: u.curso),
+              DataGridCell<String>(columnName: 'classe', value: u.classe),
+              DataGridCell<String>(columnName: 'turma', value: u.turma),
+              DataGridCell<bool>(columnName: 'status', value: u.status),
             ]))
         .toList();
   }
@@ -205,60 +292,6 @@ class UsersReportDataSource extends DataGridSource {
           child: Text(cell.value.toString()),
         );
       }).toList(),
-    );
-  }
-}
-
-        setState(() {
-          _status = 'PDF gerado e baixado no navegador.';
-        });
-      } else {
-        // MOBILE/DESKTOP: Salva no filesystem
-        final dir = await getApplicationDocumentsDirectory();
-        final file = File('${dir.path}/relatorio_${tipo}_${DateTime.now().millisecondsSinceEpoch}.pdf');
-        await file.writeAsBytes(bytes, flush: true);
-        setState(() {
-          _status = 'PDF salvo em: ${file.path}';
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _status = 'Erro ao gerar PDF: $e';
-      });
-    } finally {
-      setState(() {
-        _loading = false;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Relatórios (Admin)')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ElevatedButton(
-              onPressed: _loading ? null : () => _generatePDF('alunos'),
-              child: const Text('Gerar relatório de Alunos'),
-            ),
-            ElevatedButton(
-              onPressed: _loading ? null : () => _generatePDF('reclamacoes'),
-              child: const Text('Gerar relatório de Reclamações'),
-            ),
-            ElevatedButton(
-              onPressed: _loading ? null : () => _generatePDF('usuarios'),
-              child: const Text('Gerar relatório de Usuários'),
-            ),
-            const SizedBox(height: 24),
-            if (_loading) const Center(child: CircularProgressIndicator()),
-            if (_status != null) Text(_status!, style: const TextStyle(color: Colors.green)),
-          ],
-        ),
-      ),
     );
   }
 }

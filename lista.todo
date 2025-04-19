@@ -4,3 +4,11 @@
 - Gerenciar administradores
 - Quantidade de alunos cadastrados
 
+
+# Adicionar os seguintes campos para aluno:
+
+- Nome do pai
+- Nome da mãe
+- Nascimento
+- Sexo
+- Especial?
